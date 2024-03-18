@@ -65,3 +65,54 @@ def virus_total_analise(file_path, password, api_key):
         print(processes_created)
 
         print("Анализ файла закончен.")
+        
+# Основной метод, который работает во второй части задания
+def vulners_analise(software_list, api_key):
+    headers = {
+    "Content-Type": "application/json"
+    }
+
+    for software in software_list:
+        program = software["Program"]
+        version = software["Version"]
+
+        data = {
+        "software": program,
+        "version": version,
+        "type": "software",
+        "maxVulnerabilities": 100,
+        "apiKey": api_key
+        }
+
+        response = requests.post("https://vulners.com/api/v3/burp/softwareapi/", headers=headers, json=data).json()["data"]
+
+        print(f"Program: {program}, program: {version}")
+
+        cves = []
+        exploits = {}
+
+        search = response.get("search")
+        if search == None:
+            print("Не найдено")
+            continue
+
+        for value in response["search"]:
+            new_cves = value["_source"]["cvelist"]
+            cves.extend(new_cves)
+
+        for cve in value["_source"]["cvelist"]:
+            exploits[cve] = {
+                "href": value["_source"]["href"],
+                "description": value["_source"]["description"]
+            }
+
+
+        print("Список CVE:")
+        for cve in cves:
+            print(cve)
+
+        print("Информация об эксплоитах для CVE:")
+        for cve, info in exploits.items():
+            print(f"{cve}:")
+            print(f"Ссылка: {info['href']}")
+            print(f"Описание: {info['description']}\n")
