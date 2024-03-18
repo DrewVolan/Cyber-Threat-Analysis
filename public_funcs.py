@@ -61,8 +61,8 @@ def virus_total_analise(file_path, password, api_key):
         behaviour_summary_data = behaviour_summary["data"]
 
         print("Полученных данных достаточно много. Для примера выведем созданные процессы.")
-        processes_created = behaviour_summary_data["processes_created"]
-        print(processes_created)
+        services_opened = behaviour_summary_data.get("services_opened")
+        print(services_opened)
 
         print("Анализ файла закончен.")
         
