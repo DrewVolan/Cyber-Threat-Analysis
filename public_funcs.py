@@ -60,9 +60,8 @@ def virus_total_analise(file_path, password, api_key):
         behaviour_summary = requests.get(f"https://www.virustotal.com/api/v3/files/{sha256}/behaviour_summary", headers=headers_json).json()
         behaviour_summary_data = behaviour_summary["data"]
 
-        print("Полученных данных достаточно много. Для примера выведем созданные процессы.")
-        services_opened = behaviour_summary_data.get("services_opened")
-        print(services_opened)
+        print("Полный итог анализа")
+        print(behaviour_summary_data)
 
         print("Анализ файла закончен.")
         
